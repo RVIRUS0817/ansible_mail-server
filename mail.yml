@@ -1,0 +1,14 @@
+- hosts: mail-server01
+  roles:
+    - common
+    - h2o
+    - mysql
+    - php
+    - postfix
+    - dovecot
+    - postfixadmin
+    - ssl
+    - cron
+    - letsencrypt
+    - logrotate
+    - fail2ban

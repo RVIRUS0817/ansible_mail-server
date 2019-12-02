@@ -1,0 +1,33 @@
+- name: dovecot install
+  yum: name={{ item }} state=present 
+  loop:
+    - dovecot
+    - dovecot-mysql
+
+- name: copy dovecot.conf
+  copy:
+    src: "roles/dovecot/templates/{{ item.src }}"
+    dest: "/etc/dovecot/{{ item.dest }}"
+    backup: no
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - { src: "dovecot.conf", dest: . }
+    - { src: "dovecot-sql.conf.ext", dest: . }
+
+- name: copy dovecot conf.d
+  copy:
+    src: "roles/dovecot/templates/{{ item.src }}"
+    dest: "/etc/dovecot/conf.d/{{ item.dest }}"
+    backup: no
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - { src: "10-auth.conf", dest: . }
+    - { src: "10-mail.conf", dest: . }
+    - { src: "10-master.conf", dest: . }
+    - { src: "10-ssl.conf", dest: . }
+    - { src: "20-lmtp.conf", dest: . }
+  notify: restart dovecot

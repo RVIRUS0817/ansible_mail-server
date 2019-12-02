@@ -1,0 +1,6 @@
+- name: cron letsencrypt
+  cron: name="letsencrypt" 
+    minute="0" 
+    hour="5" 
+    job="/etc/letsencrypt/certbot-auto renew"
+

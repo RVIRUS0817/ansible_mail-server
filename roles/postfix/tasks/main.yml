@@ -1,0 +1,36 @@
+- name: postfix install
+  yum: name=postfix state=present 
+
+- name: start postfix
+  systemd: name=postfix enabled=yes state=started
+
+- name: mkdir mysql in /etc/postfix/
+  file: path=/etc/postfix/mysql state=directory owner=root group=root mode=0755
+
+- name: copy virtual-alias-maps.cf
+  copy:
+    src: "roles/postfix/templates/{{ item.src }}"
+    dest: "/etc/postfix/mysql/{{ item.dest }}"
+    backup: no
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - { src: "virtual-alias-maps.cf", dest: . }
+    - { src: "virtual-mailbox-domains.cf", dest: . }
+    - { src: "virtual-mailbox-maps.cf", dest: . }
+    - { src: "virtual-mailbox-limit-maps.cf", dest: . }
+
+- name: copy main.cf
+  copy:
+    src: "roles/postfix/templates/{{ item.src }}"
+    dest: "/etc/postfix/{{ item.dest }}"
+    backup: no
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - { src: "main.cf", dest: . }
+    - { src: "header_checks", dest: . }
+    - { src: "master.cf", dest: . }
+  notify: restart postfix

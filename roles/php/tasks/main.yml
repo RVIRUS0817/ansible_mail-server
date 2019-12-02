@@ -1,0 +1,44 @@
+- name: install remi epel
+  yum: name={{ item }} state=present
+  loop:
+    - "{{ PHP_VERSION_EPEL }}"
+    - "{{ PHP_VERSION_REMI }}"
+
+- name: php70 install
+  yum: name={{ item }} state=present enablerepo=remi,remi-php70
+  loop:
+    - php
+    - php-fpm
+    - php-gd
+    - php-bcmath
+    - php-mbstring
+    - php-xml
+    - php-ldap
+    - php-mysqlnd
+    - php-opcache
+    - php-pear
+    - php-pecl-zip
+    - php-imap
+
+- name: copy php.ini
+  copy:
+    src: "roles/php/files/{{ item.src }}"
+    dest: "/etc/{{ item.dest }}"
+    backup: no
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - { src: "php.ini", dest: . }
+
+- name: copy php-fpm www.conf
+  copy:
+    src: "roles/php/files/{{ item.src }}"
+    dest: "/etc/php-fpm.d/{{ item.dest }}"
+    backup: no
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - { src: "www.conf", dest: . }
+  notify: restart php-fpm

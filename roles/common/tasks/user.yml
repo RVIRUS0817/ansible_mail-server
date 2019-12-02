@@ -1,0 +1,44 @@
+- name: create user
+  user:
+    name: "{{ item.name }}"
+    createhome: yes
+    password: "{{ item.password | password_hash('sha512') }}"
+    shell: "{{ item.shell }}"
+    state: "{{ item.state }}"
+    remove: "{{ item.remove }}"
+  loop:
+  - { shell: '/bin/zsh', state: 'present', remove: 'no', name: 'adachin', password: 'adachinpw' }
+  - { shell: '/bin/bash', state: 'present', remove: 'no', name: 'vmail', password: 'vmailpw' }
+
+- name: vmail group
+  group:
+    name: vmail
+    state: present
+
+- name: add sudoers
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: "{{ item.match }}"
+    line: "{{ item.line }}"
+  loop:
+  - { match: 'adachin', line: 'adachin ALL=(ALL) NOPASSWD: ALL' }
+  - { match: 'nobody', line: 'ALL=(vmail)  NOPASSWD:ALL' }
+
+- name: authorized_key for user  
+  ignore_errors: true
+  authorized_key:
+    user: adachin
+    key: "ssh-rsa "
+
+- name: mkdir vmail
+  file: path=/var/vmail state=directory owner=vmail group=vmail mode=0700
+
+- name: mkdir vhosts
+  file: path=/var/vmail/vhosts state=directory owner=vmail group=vmail mode=0700
+
+- name: mkdir bin
+  file: path=/var/vmail/bin state=directory owner=vmail group=vmail mode=0700
+
+- name: mkdir deleted-vhosts
+  file: path=/var/vmail/deleted-vhosts state=directory owner=vmail group=vmail mode=0700

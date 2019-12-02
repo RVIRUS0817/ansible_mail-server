@@ -1,0 +1,128 @@
+myhostname = mail."{{ DOMAIN }}"
+mydomain = "{{ DOMAIN }}"
+myorigin = $mydomain
+inet_interfaces = all
+inet_protocols = ipv4
+mydestination = localhost localhost.$mydomain
+mynetworks = 127.0.0.0/8
+recipient_delimiter  = +
+header_checks = regexp:/etc/postfix/header_checks
+mime_header_checks = regexp:/etc/postfix/header_checks
+smtpd_banner = ESMTP $mail_name
+readme_directory = no
+mailbox_command = procmail -a "$EXTENSION"
+
+biff                 = no
+append_dot_mydomain  = no
+delay_warning_time   = 4h
+disable_vrfy_command = yes
+message_size_limit   = 51200000
+mailbox_size_limit   = 102400000
+
+
+#notify_classes = resource, software
+#error_notice_recipient     = admin@ドメイン名
+
+
+#
+# Smtp
+#
+smtp_tls_loglevel            = 1
+smtp_tls_security_level      = may
+#smtp_tls_CAfile              = 
+smtp_tls_protocols           = !SSLv2, !SSLv3
+smtp_tls_mandatory_protocols = !SSLv2, !SSLv3
+smtp_tls_mandatory_ciphers   = high
+smtp_tls_exclude_ciphers     = aNULL, eNULL, EXPORT, DES, 3DES, RC2, RC4, MD5, PSK, SRP, DSS, AECDH, ADH
+smtp_tls_note_starttls_offer = yes
+
+#
+# Smtpd
+#
+smtpd_tls_loglevel            = 1
+smtpd_tls_auth_only           = yes
+smtpd_tls_security_level      = may
+smtpd_tls_received_header     = yes
+smtpd_tls_protocols           = !SSLv2, !SSLv3
+smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
+smtpd_tls_mandatory_ciphers   = medium
+
+#smtpd_tls_CAfile              = $smtp_tls_CAfile
+smtpd_tls_cert_file           = /etc/postfix/ssl/selfsigned/cert.pem
+smtpd_tls_key_file            = /etc/postfix/ssl/selfsigned/privkey.pem
+smtpd_tls_dh1024_param_file   = /etc/postfix/ssl/dhparams/dh2048.pem
+smtpd_tls_dh512_param_file    = /etc/postfix/ssl/dhparams/dh512.pem
+
+tls_preempt_cipherlist = yes
+tls_random_source      = dev:/dev/urandom
+
+smtp_tls_session_cache_database  = btree:${data_directory}/smtp_scache
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+lmtp_tls_session_cache_database  = btree:${data_directory}/lmtp_scache
+
+
+#
+# SASL
+#
+
+smtpd_sasl_auth_enable          = yes
+smtpd_sasl_type                 = dovecot
+smtpd_sasl_path                 = private/auth
+smtpd_sasl_security_options     = noanonymous
+smtpd_sasl_tls_security_options = $smtpd_sasl_security_options
+smtpd_sasl_local_domain         = $mydomain
+smtpd_sasl_authenticated_header = yes
+
+broken_sasl_auth_clients = yes
+
+#
+# Virtual mail box
+#
+
+virtual_uid_maps        = static:10000
+virtual_gid_maps        = static:10000
+virtual_minimum_uid     = 10000
+virtual_mailbox_base    = /var/vmail/vhosts
+virtual_transport       = lmtp:unix:private/dovecot-lmtp
+virtual_mailbox_domains = mysql:/etc/postfix/mysql/virtual-mailbox-domains.cf
+virtual_mailbox_maps    = mysql:/etc/postfix/mysql/virtual-mailbox-maps.cf
+virtual_alias_maps      = mysql:/etc/postfix/mysql/virtual-alias-maps.cf
+
+# 容量制限
+#virtual_create_maildirsize = yes
+#virtual_mailbox_extended   = yes
+virtual_mailbox_limit      = 102400000
+#virtual_mailbox_limit_maps = mysql:/etc/postfix/mysql/virtual-mailbox-limit-maps.cf
+#virtual_mailbox_limit_override = yes
+#virtual_maildir_limit_message = Sorry, the user's maildir has overdrawn his diskspace quota, please try again later.
+#virtual_overquota_bounce = yes 
+
+
+#
+# アクセス制限
+#
+
+smtpd_recipient_restrictions =
+     permit_mynetworks,
+     permit_sasl_authenticated,
+     reject_non_fqdn_recipient,
+     reject_unauth_destination,
+     reject_unknown_recipient_domain,
+     reject_rbl_client all.rbl.jp,
+     reject_rbl_client bl.spamcop.net,
+     reject_rbl_client zen.spamhaus.org
+
+smtpd_helo_restrictions =
+     permit_mynetworks,
+     permit_sasl_authenticated,
+     reject_invalid_helo_hostname,
+     reject_non_fqdn_helo_hostname
+
+smtpd_client_restrictions =
+     permit_mynetworks,
+     permit_inet_interfaces,
+     permit_sasl_authenticated
+
+smtpd_sender_restrictions =
+     reject_non_fqdn_sender,
+     reject_unknown_sender_domain

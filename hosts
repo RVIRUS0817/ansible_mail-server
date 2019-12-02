@@ -1,0 +1,6 @@
+[web]
+mail-server01
+
+#group
+[prd:children]
+web

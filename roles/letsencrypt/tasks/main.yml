@@ -1,0 +1,5 @@
+- name: git_clone
+  git:
+    repo: "https://github.com/letsencrypt/letsencrypt.git"
+    dest: "/etc/letsencrypt/"
+
