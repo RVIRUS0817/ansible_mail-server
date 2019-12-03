@@ -12,3 +12,5 @@ submission inet n       -       n       -       -       smtpd
   -o smtpd_reject_unlisted_recipient=no
   -o smtpd_client_restrictions=permit_sasl_authenticated,reject
 proxymap  unix  -       -       n       -       -       proxymap
+anvil     unix  -       -       n       -       1       anvil
+
