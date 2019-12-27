@@ -125,6 +125,7 @@ CONF['setup_password'] = 'xxxxxxxxx';
 - add DNS record
 ```
 mail.hoge.jp A xxx.xxx.xxx.xxx
+mail.hoge.jp TXT v=spf1 +a:mail.hoge.jp ~all
 admin.hoge.jp A xxx.xxx.xxx.xxx
 hoge.jp MX xxx.xxx.xxx.xxx
 ```
