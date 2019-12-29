@@ -47,11 +47,10 @@ smtpd_tls_protocols           = !SSLv2, !SSLv3
 smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
 smtpd_tls_mandatory_ciphers   = medium
 
-#smtpd_tls_CAfile              = $smtp_tls_CAfile
-smtpd_tls_cert_file           = /etc/postfix/ssl/selfsigned/cert.pem
-smtpd_tls_key_file            = /etc/postfix/ssl/selfsigned/privkey.pem
-smtpd_tls_dh1024_param_file   = /etc/postfix/ssl/dhparams/dh2048.pem
-smtpd_tls_dh512_param_file    = /etc/postfix/ssl/dhparams/dh512.pem
+smtpd_use_tls = yes
+smtpd_tls_cert_file           = /etc/letsencrypt/live/"{{ MAIL_DOMAIN }}"/cert.pem
+smtpd_tls_CAfile              = /etc/letsencrypt/live/"{{ MAIL_DOMAIN }}"/chain.pem
+smtpd_tls_key_file            = /etc/letsencrypt/live/"{{ MAIL_DOMAIN }}"/privkey.pem
 
 tls_preempt_cipherlist = yes
 tls_random_source      = dev:/dev/urandom

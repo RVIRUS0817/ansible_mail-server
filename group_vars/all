@@ -12,3 +12,4 @@ MYSQL_VERSION: "http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.
 #postfix
 DBPASS: "1234"
 DOMAIN: "hoge.jp"
+MAIL_DOMAIN: "mail.hoge.jp"

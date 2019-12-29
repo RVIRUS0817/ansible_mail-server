@@ -42,37 +42,22 @@ httpsization uses letsencrypt.
 
 Please change hoge to domain name!! you have to setting basic.
 
-## 3. make dh2048.pem,dh512.pem
-
-Create dh2048.pem and dh512.pem on the server. Copy this to `roles/ssl/files` .
-
-```
-$ sudo mkdir -p /etc/postfix/ssl/dhparams/
-$ sudo openssl dhparam -out /etc/postfix/ssl/dhparams/dh2048.pem 2048
-$ sudo openssl dhparam -out /etc/postfix/ssl/dhparams/dh512.pem 512
-$ sudo mkdir -p /etc/postfix/ssl/selfsigned/
-$ sudo openssl req -new -newkey rsa:4096 -days 3658 -sha256 -nodes -x509 \
-      -subj "/C=JP/ST=Shizuoka/L=Shizuoka/O=Mailserver certificate/OU=Mail/hoge.jp/emailAddress=admin@hoge.jp" \
-      -keyout /etc/postfix/ssl/selfsigned/privkey.pem \
-      -out /etc/postfix/ssl/selfsigned/cert.pem
-```
-
-## 4. setting dbpass domain
+## 3. setting dbpass domain
 - group_vars/all
 
-## 5. dry-run
+## 4. dry-run
 
 ````
 $ ansible-playbook -i hosts mail.yml -C
 ````
 
-## 6. run
+## 5. run
 
 ````
 $ ansible-playbook -i hosts mail.yml
 ````
 
-## 7. setting MySQL
+## 6. setting MySQL
 
 Set up MySQL manually. Let's set up a dedicated DB and authority for wordpress.
 
@@ -93,7 +78,7 @@ $ mysql -u root -p
 > grant all privileges on postfix.* to postfix@localhost identified by 'xxxxxxxxxxx';
 ```
 
-## 8. setting letsencrypt
+## 7. setting letsencrypt
 
 Let's get a certificate with letsencrypt when wordpress can be viewed with http.
 Please change hoge to domain name!!
@@ -106,14 +91,21 @@ Comment out all below
 
 ```
 # systemctl restart h2o
+# systemctl stop h2o
 ```
 
 ```
 # /etc/letsencrypt/letsencrypt-auto certonly --standalone -d hoge.jp --agree-tos
+# /etc/letsencrypt/letsencrypt-auto certonly --standalone -d mail.hoge.jp --agree-tos
 
 ```
 
-## 9. access postfixadmin
+- check postfix,dovecot ssl
+  - main.cf
+  - 10-ssl.conf
+
+
+## 8. access postfixadmin
 
 https://admin.hoge.jp/postfixadmin
 
@@ -129,5 +121,9 @@ admin.hoge.jp A xxx.xxx.xxx.xxx
 hoge.jp TXT v=spf1 +a:mail.hoge.jp ~all
 hoge.jp MX xxx.xxx.xxx.xxx
 ```
+
+## 9. setting thunderbird
+![スクリーン�ョット_2019-12-29_23_11_36](https://user-images.githubusercontent.com/5633085/71557936-bf380c00-2a90-11ea-96a3-3e6ac5be9569.jpg)
+�
 
 Enjoy!!!🤣
