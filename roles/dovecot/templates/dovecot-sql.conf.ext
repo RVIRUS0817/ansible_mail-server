@@ -1,5 +1,7 @@
 driver   = mysql
 connect  = host=localhost dbname=postfix user=postfix password="{{ DBPASS }}"
+#default_pass_scheme = PLAIN
 default_pass_scheme = SHA512-CRYPT
 password_query = SELECT password FROM mailbox WHERE username = '%u' AND active='1'
-user_query = SELECT CONCAT('/var/vmail/vhosts/', maildir) AS mail, 10000 AS uid, 10000 AS gid, CONCAT('*:bytes=', quota) AS quota_rule FROM mailbox WHERE username = '%u' AND active='1'
+user_query = SELECT CONCAT('/var/vmail/vhosts/', maildir) AS mail, 1001 AS uid, 1001 AS gid, CONCAT('*:bytes=', quota) AS quota_rule FROM mailbox WHERE username = '%u' AND active='1'
+
