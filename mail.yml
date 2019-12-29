@@ -7,7 +7,6 @@
     - postfix
     - dovecot
     - postfixadmin
-    - ssl
     - cron
     - letsencrypt
     - logrotate
