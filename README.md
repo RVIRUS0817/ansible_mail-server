@@ -61,8 +61,6 @@ $ ansible-playbook -i hosts mail.yml
 
 Set up MySQL manually. Let's set up a dedicated DB and authority for wordpress.
 
-・MySQL
-
 ```
 $ grep 'temporary password' /var/log/mysqld.log
 $ mysql_secure_installation
@@ -70,7 +68,7 @@ change root pass
 all Y
 ```
 
-・create podtfix DB and user,pass
+create podtfix DB and user,pass
 
 ```
 $ mysql -u root -p
@@ -97,13 +95,11 @@ Comment out all below
 ```
 # /etc/letsencrypt/letsencrypt-auto certonly --standalone -d hoge.jp --agree-tos
 # /etc/letsencrypt/letsencrypt-auto certonly --standalone -d mail.hoge.jp --agree-tos
-
 ```
 
-- check postfix,dovecot ssl
-  - main.cf
-  - 10-ssl.conf
-
+check postfix,dovecot ssl
+- main.cf
+- 10-ssl.conf
 
 ## 8. access postfixadmin
 
