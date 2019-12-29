@@ -14,8 +14,8 @@
     src: "roles/postfixadmin/files/{{ item.src }}"
     dest: "/var/vmail/bin/{{ item.dest }}"
     backup: no
-    owner: nobody
-    group: nobody
+    owner: vmail
+    group: vmail
     mode: 0700
   loop:
     - { src: "postfixadmin-mailbox-postcreation.sh", dest: . }
