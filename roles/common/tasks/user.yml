@@ -38,7 +38,7 @@
   file: path=/var/vmail/vhosts state=directory owner=vmail group=mail mode=0775
 
 - name: mkdir bin
-  file: path=/var/vmail/bin state=directory owner=vmail group=vmail mode=0775
+  file: path=/var/vmail/bin state=directory owner=vmail group=vmail mode=0700
 
 - name: mkdir deleted-vhosts
   file: path=/var/vmail/deleted-vhosts state=directory owner=vmail group=vmail mode=0775
