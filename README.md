@@ -103,7 +103,7 @@ check postfix,dovecot ssl
 
 ## 8. access postfixadmin
 
-https://admin.hoge.jp/postfixadmin
+https://admin.hoge.jp/postfixadmin/setup.php
 
 - change pass and add `roles/postfixadmin/files/postfixadmin/config.inc.php`
 ```
