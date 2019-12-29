@@ -23,7 +23,7 @@
     line: "{{ item.line }}"
   loop:
   - { match: 'adachin', line: 'adachin ALL=(ALL) NOPASSWD: ALL' }
-  - { match: 'nobody', line: 'ALL=(vmail)  NOPASSWD:ALL' }
+  - { match: 'nobody', line: 'nobody ALL=(vmail)  NOPASSWD:ALL' }
 
 - name: authorized_key for user  
   ignore_errors: true
@@ -32,13 +32,13 @@
     key: "ssh-rsa "
 
 - name: mkdir vmail
-  file: path=/var/vmail state=directory owner=vmail group=vmail mode=0700
+  file: path=/var/vmail state=directory owner=vmail group=mail mode=0775
 
 - name: mkdir vhosts
-  file: path=/var/vmail/vhosts state=directory owner=vmail group=vmail mode=0700
+  file: path=/var/vmail/vhosts state=directory owner=vmail group=mail mode=0775
 
 - name: mkdir bin
-  file: path=/var/vmail/bin state=directory owner=vmail group=vmail mode=0700
+  file: path=/var/vmail/bin state=directory owner=vmail group=vmail mode=0775
 
 - name: mkdir deleted-vhosts
-  file: path=/var/vmail/deleted-vhosts state=directory owner=vmail group=vmail mode=0700
+  file: path=/var/vmail/deleted-vhosts state=directory owner=vmail group=vmail mode=0775
