@@ -11,6 +11,7 @@
 - php7.0
 - H2O 2.2.5
 - MySQL5.7
+- Fail2Ban v0.9.7
 - vhost directory
 ```
 # ls /var/vmail/
