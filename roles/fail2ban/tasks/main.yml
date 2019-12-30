@@ -4,14 +4,25 @@
 - name: start fail2ban
   systemd: name=fail2ban enabled=yes state=started
 
-  #- name: copy jail.local
-  #  copy:
-  #    src: "roles/fail2ban/files/{{ item.src }}"
-  #    dest: "/etc/fail2ban/jail.d/"
-  #    backup: no
-  #    owner: root
-  #    group: root
-  #    mode: 0644
-  #  loop:
-  #    - { src: jail.local }
-  #  notify: restart fail2ban
+    - { src: roles/fail2ban/files/filter.d/h2o-xmlrpc.conf, dest: . }
+
+- name: copy fail2ban jail.d
+  copy:
+    src: "{{ item.src }}"
+    dest: "/etc/fail2ban/jail.d/{{ item.dest }}"
+    owner: root
+    group: root
+  loop:
+    - { src: roles/fail2ban/files/jail.d/sshd.conf, dest: . }
+    - { src: roles/fail2ban/files/jail.d/postfix.conf, dest: . }
+
+- name: copy fail2ban jail.conf
+  copy:
+    src: "{{ item.src }}"
+    dest: "/etc/fail2ban/{{ item.dest }}"
+    owner: root
+    group: root
+  loop:
+    - { src: roles/fail2ban/files/jail.conf, dest: . }
+  notify: restart fail2ban
+
