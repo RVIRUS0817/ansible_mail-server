@@ -116,7 +116,7 @@ CONF['setup_password'] = 'xxxxxxxxx';
 mail.hoge.jp A xxx.xxx.xxx.xxx
 admin.hoge.jp A xxx.xxx.xxx.xxx
 hoge.jp TXT v=spf1 +a:mail.hoge.jp ~all
-hoge.jp MX xxx.xxx.xxx.xxx
+hoge.jp MX mail.hoge.jp
 ```
 
 ## 9. setting thunderbird
